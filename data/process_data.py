@@ -4,28 +4,58 @@ from sqlalchemy import create_engine
 
 
 def load_data(messages_filepath, categories_filepath):
+    """
+    Load and merge messages and categories datasets.
+
+    Args:
+        messages_filepath (str): Filepath of the messages dataset.
+        categories_filepath (str): Filepath of the categories dataset.
+
+    Returns:
+        df (pandas.DataFrame): Merged Pandas DataFrame containing messages and categories.
+    """
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
     return messages.merge(categories, on='id')
 
 
 def clean_data(df):
+    """
+    Cleans the input DataFrame by splitting the 'categories' column into separate category columns,
+    converting their values to binary, and dropping duplicates.
+
+    Args:
+        df (pandas.DataFrame): Input DataFrame to be cleaned.
+
+    Returns:
+        pandas.DataFrame: Cleaned DataFrame.
+    """
     categories = df['categories'].str.split(';', expand=True)
     category_colnames = categories.iloc[0, :].apply(lambda x: x[:-2])
     categories.columns = category_colnames
-    for column in categories:
-        # set each value to be the last character of the string
-        categories[column] = categories[column].str[-1]
 
-        # convert column from string to numeric
-        categories[column] = categories[column].astype(int)
+    # convert category values to binary
+    for column in categories:
+        categories[column] = categories[column].apply(lambda x: 1 if int(x.split('-')[1]) > 0 else 0)
+
+    # drop original categories column and concatenate the new binary ones
     df = df.drop('categories', axis=1)
     df = pd.concat([df, categories], axis=1)
+
+    # drop duplicates
     df = df.drop_duplicates()
+
     return df
 
 
 def save_data(df, database_filename):
+    """
+    Save the clean disaster response data in a SQLite database.
+
+    Args:
+    df (pandas.DataFrame): Cleaned disaster response data.
+    database_filename (str): Path to SQLite database.
+    """
     engine = create_engine('sqlite:///' + database_filename)
     df.to_sql('CleanDisasterResponse', engine, index=False, if_exists='replace')
 

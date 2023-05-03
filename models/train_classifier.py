@@ -16,6 +16,17 @@ import pickle
 
 
 def load_data(database_filepath):
+    """
+    Load cleaned data from a SQLite database into pandas DataFrame and extract message text, target labels, and category names.
+
+    Args:
+    database_filepath: str. Filepath of the SQLite database.
+
+    Returns:
+    X: pandas DataFrame. Message text.
+    Y: pandas DataFrame. Target labels.
+    category_names: list. Category names of the target labels.
+    """
     engine = create_engine(f'sqlite:///{database_filepath}')
     df = pd.read_sql_table('CleanDisasterResponse', con=engine)
     X = df['message']
@@ -25,6 +36,15 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
+    """
+    Tokenizes text by converting all text to lowercase, removing English stopwords, and lemmatizing words.
+
+    Args:
+    text (str): Text to be tokenized
+
+    Returns:
+    tokens (list): A list of cleaned and lemmatized tokens.
+    """
     text = text.lower()
     tokens = word_tokenize(text)
     tokens = [word for word in tokens if word not in stopwords.words('english')]
@@ -35,6 +55,13 @@ def tokenize(text):
 
 # Made N_Jobs=1 as I was unable to get the file to pickle using -1
 def build_model():
+    """
+    Build a machine learning pipeline with GridSearchCV to classify the messages
+    into multiple categories.
+
+    Returns:
+    cv: GridSearchCV object, the model with the best parameters.
+    """
     pipeline = Pipeline([
         ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
@@ -48,6 +75,20 @@ def build_model():
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
+    """
+    Evaluate the performance of the trained model on the test set.
+
+    Parameters:
+    model (object): A trained scikit-learn pipeline model.
+    X_test (array-like): A numpy array or Pandas DataFrame of the test feature data.
+    Y_test (array-like): A numpy array or Pandas DataFrame of the test target data.
+    category_names (list): A list of the target categories.
+
+    Returns:
+    None
+
+    Prints out a classification report for each target category, including precision, recall, and f1-score.
+    """
     Y_pred = model.predict(X_test)
     for i, col in enumerate(category_names):
         print(f"Category: {col}\n")
@@ -56,6 +97,20 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
 
 def save_model(model, model_filepath):
+    """
+    Save the trained model to a file in binary format.
+
+    Parameters
+    ----------
+    model : object
+        The trained model to be saved.
+    model_filepath : str
+        The path of the file to save the model to.
+
+    Returns
+    -------
+    None
+    """
     with open(model_filepath, 'wb') as f:
         pickle.dump(model, f)
 
