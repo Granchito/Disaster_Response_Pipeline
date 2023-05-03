@@ -41,3 +41,5 @@ Open your browser and go to http://localhost:3001/.
 - App folder: Contains files for web application
 - Data folder: Contains files for the data and data cleansing
 - Models: Contains machine learning model and pkl file
+
+#### Thank you to Rajat for all of the assistance on my questions posted to the knowledge forums.
