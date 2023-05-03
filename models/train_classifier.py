@@ -33,6 +33,7 @@ def tokenize(text):
     return tokens
 
 
+# Made N_Jobs=1 as I was unable to get the file to pickle using -1
 def build_model():
     pipeline = Pipeline([
         ('vect', CountVectorizer(tokenizer=tokenize)),
