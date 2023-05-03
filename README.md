@@ -34,4 +34,5 @@ Follow the instructions within the README within the Models Folder.
 - Data folder: Contains files for the data and data cleansing
 - Models: Contains machine learning model and pkl file
 
-#### Thank you to Rajat for all of the assistance on my questions posted to the knowledge forums.
+### Acknowledgements
+Thank you to Rajat for all of the assistance on my questions posted to the knowledge forums.
