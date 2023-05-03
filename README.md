@@ -1,5 +1,5 @@
 # Disaster Response Pipeline Project
-This project is part of Udacity's Data Scientist Nanodegree. The aim of this project is to build a web app that can classify messages during disasters.
+This project is part of Udacity's Data Scientist Nanodegree. The aim of this project is to build a web app that can classify messages during disasters. This application will be able to help thousands in the event of a disaster. The ability to categorize responses on the fly will allow quicker and more accurate responses.
 
 ## Project Structure
 The project consists of three main components:
@@ -29,10 +29,37 @@ Install the required Libraries:
 Follow the instructions within the README within the Models Folder.
 
 ## Files in the Repository
-- Ideas folder: Not neccecary to run project
-- App folder: Contains files for web application
-- Data folder: Contains files for the data and data cleansing
-- Models: Contains machine learning model and pkl file
+app
+
+| - template
+
+| |- master.html # main page of web app
+
+| |- go.html # classification result page of web app
+
+|- run.py # Flask file that runs app
+
+data
+
+|- disaster_categories.csv # data to process
+
+|- disaster_messages.csv # data to process
+
+|- process_data.py
+
+|- DisasterResponse.db # database to save clean data to
+
+models
+
+|- train_classifier.py
+
+|- classifier.pkl # saved model
+
+|- test.py # a file to test small adjustments in and use as a notes file
+
+|- README.md # additional instructions to run scripts once open in IDE
+
+README.md
 
 ### Acknowledgements
 Thank you to Rajat for all of the assistance on my questions posted to the knowledge forums.
